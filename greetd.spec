@@ -67,7 +67,7 @@ export CARGO_HOME="$(pwd)/.cargo"
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT{/etc/{greetd,pam.d},%{_bindir},%{systemdunitdir}}
+install -d $RPM_BUILD_ROOT{/etc/{greetd,pam.d},%{_bindir},%{systemdunitdir},/var/lib/greetd}
 
 cp -p target/release/{greetd,agreety} $RPM_BUILD_ROOT%{_bindir}
 sed -e 's/^\([#[:space:]]*\)\?user[[:space:]]*=.*/user = greetd-greeter/' config.toml > $RPM_BUILD_ROOT/etc/greetd/config.toml
@@ -82,7 +82,7 @@ cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/greetd
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-%useradd -u 343 -r -d /usr/share/empty -s /bin/sh -c "greetd greeter user" -g nobody -G video greetd-greeter
+%useradd -u 343 -r -d /var/lib/greetd -s /bin/sh -c "greetd greeter user" -g nobody -G video greetd-greeter
 
 %post
 %systemd_post %{name}.service
@@ -107,6 +107,7 @@ fi
 %{_mandir}/man1/greetd.1*
 %{_mandir}/man5/greetd.5*
 %{_mandir}/man7/greetd-ipc.7*
+%attr(750,greetd-greeter,root) %dir /var/lib/greetd
 
 %files greeter-agreety
 %defattr(644,root,root,755)
