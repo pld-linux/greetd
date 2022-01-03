@@ -9,8 +9,9 @@ Group:		Applications
 Source0:	https://git.sr.ht/~kennylevinsen/greetd/archive/%{version}.tar.gz
 # Source0-md5:	6c15717ca4741f5c99bba7c16846481f
 Source1:	%{name}-crates-%{crates_ver}.tar.xz
-# Source1-md5:	f0f984d1ce6075538aaa10025a1b9181
+# Source1-md5:	0bbfc01afb256f884be0759b58858de0
 Source2:	%{name}.pamd
+Patch0:		nix0.20.patch
 URL:		https://git.sr.ht/~kennylevinsen/greetd
 BuildRequires:	cargo
 BuildRequires:	pam-devel
@@ -42,6 +43,7 @@ Simple, text-based greeter for greetd.
 
 %prep
 %setup -q -a1
+%patch0 -p1
 
 %{__mv} %{name}-%{crates_ver}/* .
 sed -i -e 's/@@VERSION@@/%{version}/' Cargo.lock
