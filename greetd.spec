@@ -16,7 +16,7 @@ URL:		https://git.sr.ht/~kennylevinsen/greetd
 BuildRequires:	cargo
 BuildRequires:	pam-devel
 BuildRequires:	pkgconfig
-BuildRequires:	rpmbuild(macros) >= 2.004
+BuildRequires:	rpmbuild(macros) >= 2.011
 BuildRequires:	rust
 BuildRequires:	scdoc
 BuildRequires:	tar >= 1:1.22
@@ -28,12 +28,6 @@ Requires:	/bin/sh
 Requires:	greetd(greeter)
 Provides:	user(greetd-greeter)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-%ifarch x32
-%define		cargo_outdir	target/x86_64-unknown-linux-gnux32
-%else
-%define		cargo_outdir	target
-%endif
 
 %description
 greetd is a minimal and flexible login manager daemon that makes no
@@ -77,7 +71,7 @@ rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT{/etc/{greetd,pam.d},%{_bindir},%{systemdunitdir},/var/lib/greetd}
 
-cp -p %{cargo_outdir}/release/{greetd,agreety} $RPM_BUILD_ROOT%{_bindir}
+cp -p %{cargo_objdir}/{greetd,agreety} $RPM_BUILD_ROOT%{_bindir}
 sed -e 's/^\([#[:space:]]*\)\?user[[:space:]]*=.*/user = greetd-greeter/' config.toml > $RPM_BUILD_ROOT/etc/greetd/config.toml
 cp -p greetd.service $RPM_BUILD_ROOT%{systemdunitdir}
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/greetd
