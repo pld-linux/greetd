@@ -1,17 +1,16 @@
-%define		crates_ver	0.8.0
+%define		crates_ver	0.9.0
 
 Summary:	A login manager daemon
 Name:		greetd
-Version:	0.8.0
+Version:	0.9.0
 Release:	1
 License:	GPL v3+
 Group:		Applications
 Source0:	https://git.sr.ht/~kennylevinsen/greetd/archive/%{version}.tar.gz
-# Source0-md5:	6c15717ca4741f5c99bba7c16846481f
+# Source0-md5:	af714594386b3e648f20d6d923d2357d
 Source1:	%{name}-crates-%{crates_ver}.tar.xz
-# Source1-md5:	0bbfc01afb256f884be0759b58858de0
+# Source1-md5:	fed2be39ae7d934cad15a5e4443ddb4e
 Source2:	%{name}.pamd
-Patch0:		nix0.20.patch
 URL:		https://git.sr.ht/~kennylevinsen/greetd
 BuildRequires:	cargo
 BuildRequires:	pam-devel
@@ -43,7 +42,6 @@ Simple, text-based greeter for greetd.
 
 %prep
 %setup -q -a1
-%patch0 -p1
 
 %{__mv} %{name}-%{crates_ver}/* .
 sed -i -e 's/@@VERSION@@/%{version}/' Cargo.lock
